@@ -1,5 +1,6 @@
 import { ContactForm } from '../ContactForm/ContactForm ';
 import { ContactList } from '../ContactList/ContactList';
+import { UserMenu } from 'components/UserMenu/UserMenu';
 import { Filter } from '../Filter/Filter';
 import { Title, Conteiner } from './App.styled';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,6 +18,7 @@ export const App = () => {
 
   return (
     <Conteiner>
+      <UserMenu />
       <Title>Phonebook</Title>
       <ContactForm />
       <Title>Contacts</Title>
