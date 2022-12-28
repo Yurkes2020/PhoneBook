@@ -5,7 +5,7 @@ import { Filter } from '../Filter/Filter';
 import { Title, Conteiner } from './App.styled';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { fetchContacts } from 'Redux/FetchContact';
+import { fetchContacts } from 'Redux/Contacts/operation';
 import { ColorRing } from 'react-loader-spinner';
 
 export const App = () => {

@@ -1,70 +1,40 @@
-import { configureStore, createSlice } from '@reduxjs/toolkit';
-import { fetchContacts, addContact, deleteContact } from './FetchContact';
+import { contactsReducer } from './Contacts/slice';
+import { filterReducer } from './Filter/slice';
+import storage from 'redux-persist/lib/storage';
+import { configureStore } from '@reduxjs/toolkit';
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
 
-const sliceContact = createSlice({
-  name: 'contacts',
-  initialState: {
-    items: [],
-    isLoading: false,
-    error: null,
-  },
-
-  extraReducers: builder => {
-    builder.addCase(fetchContacts.pending, state => {
-      state.isLoading = true;
-    });
-    builder.addCase(addContact.pending, state => {
-      state.isLoading = true;
-    });
-    builder.addCase(deleteContact.pending, state => {
-      state.isLoading = true;
-    });
-    builder.addCase(fetchContacts.fulfilled, (state, action) => {
-      state.items = action.payload;
-      state.error = null;
-      state.isLoading = false;
-    });
-    builder.addCase(addContact.fulfilled, (state, action) => {
-      state.items.push(action.payload);
-      state.error = null;
-      state.isLoading = false;
-    });
-    builder.addCase(deleteContact.fulfilled, (state, action) => {
-      state.items = state.items.filter(item => item.id !== action.payload.id);
-      state.error = null;
-      state.isLoading = false;
-    });
-    builder.addCase(fetchContacts.rejected, (state, action) => {
-      state.error = action.payload;
-      state.isLoading = null;
-    });
-    builder.addCase(addContact.rejected, (state, action) => {
-      state.error = action.payload;
-    });
-    builder.addCase(deleteContact.rejected, (state, action) => {
-      state.error = action.payload;
-      state.isLoading = null;
-    });
-  },
-});
-
-const sliceFilter = createSlice({
-  name: 'filter',
-  initialState: {
-    filter: '',
-  },
-  reducers: {
-    filter(state, action) {
-      state.filter = action.payload;
+const middleware = getDefaultMiddleware => [
+  ...getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
     },
-  },
-});
+  }),
+];
 
-export const { filter } = sliceFilter.actions;
+const authPersistConfig = {
+  key: 'auth',
+  storage,
+  whitelist: ['token'],
+};
 
 export const store = configureStore({
   reducer: {
-    contacts: sliceContact.reducer,
-    filter: sliceFilter.reducer,
+    auth: persistReducer(authPersistConfig, contactsReducer),
+    contacts: contactsReducer,
+    filter: filterReducer,
   },
+  middleware,
+  devTools: process.env.NODE_ENV === 'development',
 });
+
+export const persistor = persistStore(store);

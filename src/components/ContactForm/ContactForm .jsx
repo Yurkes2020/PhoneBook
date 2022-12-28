@@ -1,10 +1,11 @@
 import { Form, FormLabel } from './ContactForm.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'Redux/FetchContact';
+import { addContact } from 'Redux/Contacts/operation';
+import { getItems } from 'Redux/Contacts/selector';
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(state => state.contacts.items);
+  const contacts = useSelector(getItems);
 
   const handleSubmit = event => {
     const form = event.currentTarget.elements;
