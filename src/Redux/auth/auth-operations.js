@@ -14,7 +14,6 @@ const token = {
   },
 };
 
-// Register new user
 const registerUser = createAsyncThunk('auth/register', async user => {
   try {
     const { data } = await axios.post('/users/signup', user);
@@ -25,7 +24,6 @@ const registerUser = createAsyncThunk('auth/register', async user => {
   }
 });
 
-// Log a previosly created user
 const loginUser = createAsyncThunk('auth/login', async user => {
   try {
     const { data } = await axios.post('users/login', user);
@@ -36,7 +34,6 @@ const loginUser = createAsyncThunk('auth/login', async user => {
   }
 });
 
-// Unlog active user
 const logoutUser = createAsyncThunk('auth/logout', async () => {
   try {
     await axios.post('users/logout');
@@ -46,7 +43,6 @@ const logoutUser = createAsyncThunk('auth/logout', async () => {
   }
 });
 
-// Get information about the current user
 const getCurrentUser = createAsyncThunk('auth/refresh', async (_, thunkAPI) => {
   const state = thunkAPI.getState();
   const persistedToken = state.auth.token;

@@ -17,13 +17,11 @@ export const contactApi = createApi({
   tagTypes: ['Contacts'],
 
   endpoints: build => ({
-    // Get a list of all contacts
     getContacts: build.query({
       query: () => ({ url: '/contacts' }),
       providesTags: ['Contacts'],
     }),
 
-    // Delete selected contact
     deleteContact: build.mutation({
       query: contactId => ({
         url: `/contacts/${contactId}`,
@@ -32,7 +30,6 @@ export const contactApi = createApi({
       invalidatesTags: ['Contacts'],
     }),
 
-    // Create a new contact
     createContact: build.mutation({
       query: newContact => ({
         url: '/contacts',
@@ -42,7 +39,6 @@ export const contactApi = createApi({
       invalidatesTags: ['Contacts'],
     }),
 
-    // Edit a existing contact
     changeContact: build.mutation({
       query: ({ contactId, ...contact }) => ({
         url: `/contacts/${contactId}`,
