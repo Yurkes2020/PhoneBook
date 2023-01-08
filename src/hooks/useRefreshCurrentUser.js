@@ -13,9 +13,8 @@ function useRefreshCurrentUser() {
     dispatch(operations.getCurrentUser())
       .unwrap()
       .then(user => setCurrentUser(user))
-      .catch(e => {
-      });
-  }, []);
+      .catch(e => {});
+  }, [dispatch]);
   return { currentUser, isRefreshing };
 }
 

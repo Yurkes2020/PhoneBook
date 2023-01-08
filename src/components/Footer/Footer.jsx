@@ -6,7 +6,7 @@ function Footer() {
     <Container>
       <Wrapper>
         <IconBook />
-        <Copyright>© Phonebook 2022 by Maxxbay</Copyright>
+        <Copyright>© Phonebook 2022 by Yurkes</Copyright>
       </Wrapper>
     </Container>
   );
