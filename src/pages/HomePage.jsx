@@ -1,10 +1,10 @@
-import homeBg from '../images/homeBg.jpg';
+import ph from '../images/ph.jpg';
 import Container from 'components/Container';
 
 function HomePage() {
   return (
     <Container>
-      <img src={homeBg} alt="Phone book" />
+      <img src={ph} alt="Phone book" />
     </Container>
   );
 }
