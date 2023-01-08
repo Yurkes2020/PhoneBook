@@ -1,33 +1,32 @@
-import { List, Delete } from './ContactList.styled';
-import { useSelector, useDispatch } from 'react-redux';
-import { deleteContact } from 'Redux/Contacts/operation';
-import { getItems } from 'Redux/Contacts/selector';
-import { getFilter } from 'Redux/Filter/selector';
+/* eslint-disable no-unused-vars */
+import Contact from 'components/Contact/Contact';
+import Loader from 'components/Loader';
+import NotFound from 'components/NotFound';
+import { List, Item } from './ContactList.styled';
+import { useGetContactsQuery } from 'redux/contacts/contact-api';
+import useFiltredContacts from 'hooks/useFiltredContacts';
 
-export const ContactList = () => {
-  const dispatch = useDispatch();
+function ContactList() {
+  const { data: contacts, isFetching, error } = useGetContactsQuery();
+  const { filteredContactList } = useFiltredContacts();
 
-  const contacts = useSelector(getItems);
-
-  const filter = useSelector(getFilter);
-
-  const filtered = contacts?.filter(contact =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
-  );
   return (
-    <List>
-      {filtered?.map(({ name, phone, id }) => (
-        <li key={id}>
-          {name}: {phone}
-          <Delete
-            type="button"
-            id={id}
-            onClick={() => dispatch(deleteContact(id))}
-          >
-            Delete
-          </Delete>
-        </li>
-      ))}
-    </List>
+    <>
+      {isFetching && <Loader />}
+      {error && <NotFound data={error.data} status={error.status} />}
+      <List>
+        {contacts &&
+          filteredContactList.map(({ id, name, number }) => {
+            console.log(filteredContactList);
+            return (
+              <Item key={id}>
+                <Contact id={id} name={name} number={number} />
+              </Item>
+            );
+          })}
+      </List>
+    </>
   );
-};
+}
+
+export default ContactList;

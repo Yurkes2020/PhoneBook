@@ -1,44 +1,87 @@
-import { ContactForm } from '../ContactForm/ContactForm ';
-import { ContactList } from '../ContactList/ContactList';
-import { UserMenu } from 'components/UserMenu/UserMenu';
-import { Filter } from '../Filter/Filter';
-import { Title, Conteiner } from './App.styled';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { fetchContacts } from 'Redux/Contacts/operation';
-import { ColorRing } from 'react-loader-spinner';
+import { lazy, Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import useRefreshCurrentUser from 'hooks/useRefreshCurrentUser';
+import AppBar from 'components/AppBar';
+import NotFound from 'components/NotFound';
+import PublicRoute from 'components/PublicRoute';
+import Loader from 'components/Loader';
+import Footer from 'components/Footer';
 
-export const App = () => {
-  const dispatch = useDispatch();
-  const selector = useSelector(state => state.contacts);
+const HomePage = lazy(() => import('pages/HomePage'));
+const ContactsPage = lazy(() => import('pages/ContactsPage'));
+const AddContactPage = lazy(() => import('pages/AddContactPage'));
+const ChangeContactPage = lazy(() => import('pages/ChangeContactPage'));
+const RegisterPage = lazy(() => import('pages/RegisterPage'));
+const LoginPage = lazy(() => import('pages/LoginPage'));
 
-  useEffect(() => {
-    dispatch(fetchContacts());
-  }, [dispatch]);
-
+function App() {
+  const { isRefreshing } = useRefreshCurrentUser();
+  // console.log(isRefreshing);
   return (
-    <Conteiner>
-      <UserMenu />
-      <Title>Phonebook</Title>
-      <ContactForm />
-      <Title>Contacts</Title>
-      <Filter />
-      {selector.error && (
-        <p style={{ textAlign: 'center' }}>Сервер не працює</p>
-      )}
-      {selector.isLoading ? (
-        <ColorRing
-          visible={true}
-          height="80"
-          width="80"
-          wrapperStyle={{ margin: 'auto' }}
-          ariaLabel="blocks-loading"
-          wrapperClass="blocks-wrapper"
-          colors={['#b8c480', '#B2A3B5', '#F4442E', '#51E5FF', '#429EA6']}
-        />
-      ) : (
-        <ContactList />
-      )}
-    </Conteiner>
+    <>
+      <AppBar />
+
+      <Suspense fallback={<Loader />}>
+        <>
+          {!isRefreshing && (
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <PublicRoute>
+                    <HomePage />
+                  </PublicRoute>
+                }
+              />
+              <Route path="/contacts/*" element={<ContactsPage />} />
+              <Route
+                path="/contacts/add"
+                element={
+                  <PublicRoute>
+                    <AddContactPage />
+                  </PublicRoute>
+                }
+              />
+              <Route
+                path="/contacts/edit/:contactId"
+                element={
+                  <PublicRoute>
+                    <ChangeContactPage />
+                  </PublicRoute>
+                }
+              />
+              <Route
+                path="/register"
+                element={
+                  <PublicRoute restricted>
+                    <RegisterPage />
+                  </PublicRoute>
+                }
+              />
+              <Route
+                path="/login"
+                element={
+                  <PublicRoute restricted>
+                    <LoginPage />
+                  </PublicRoute>
+                }
+              />
+              <Route
+                path="*"
+                element={
+                  <PublicRoute>
+                    <NotFound />
+                  </PublicRoute>
+                }
+              />
+            </Routes>
+          )}
+        </>
+      </Suspense>
+
+      <Footer />
+    </>
   );
-};
+}
+
+export default App;
