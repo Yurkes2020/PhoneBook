@@ -16,7 +16,6 @@ const LoginPage = lazy(() => import('pages/LoginPage'));
 
 function App() {
   const { isRefreshing } = useRefreshCurrentUser();
-  // console.log(isRefreshing);
   return (
     <>
       <AppBar />
