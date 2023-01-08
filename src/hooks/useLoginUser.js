@@ -16,15 +16,3 @@ function useLoginUser() {
 }
 
 export default useLoginUser;
-
-//   const onSubmitForm = { email, password }
-//     .then(() => {
-//       Notify.success('Good');
-//       dispatch(operations.loginUser({ email, password })).unwrap();
-//     })
-//     .then(() => navigate('/contacts'), { replace: true })
-//     .catch(() => Notify.warning('Error'));
-
-//   return onSubmitForm();
-// }
-// export default useLoginUser;
