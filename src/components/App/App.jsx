@@ -6,6 +6,7 @@ import NotFound from 'components/NotFound';
 import PublicRoute from 'components/PublicRoute';
 import Loader from 'components/Loader';
 import Footer from 'components/Footer';
+import PrivateRoute from 'components/PrivateRoute';
 
 const HomePage = lazy(() => import('pages/HomePage'));
 const ContactsPage = lazy(() => import('pages/ContactsPage'));
@@ -32,7 +33,15 @@ function App() {
                   </PublicRoute>
                 }
               />
-              <Route path="/contacts/*" element={<ContactsPage />} />
+              <Route
+                path="/contacts/*"
+                element={
+                  <PrivateRoute
+                    redirectTo="/login"
+                    component={<ContactsPage />}
+                  />
+                }
+              />
               <Route
                 path="/contacts/add"
                 element={
