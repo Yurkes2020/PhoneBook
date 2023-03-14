@@ -13,7 +13,7 @@ root.render(
   <React.StrictMode>
     <PersistGate loading={<Loader />} persistor={persistor}>
       <Provider store={store}>
-        <BrowserRouter basename="/PhoneBook">
+        <BrowserRouter basename="/yurkes2020.github.io">
           <App />
         </BrowserRouter>
       </Provider>
